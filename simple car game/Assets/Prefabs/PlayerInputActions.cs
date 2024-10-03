@@ -39,17 +39,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": """",
-                    ""id"": ""3c01f7da-cece-42e2-b971-61b56568a700"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
                     ""name"": ""2D Vector"",
                     ""id"": ""15d94100-3f5b-44a6-a2aa-ca4ab34ac6d5"",
                     ""path"": ""2DVector"",
@@ -105,6 +94,94 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Camera"",
+            ""id"": ""3d6f9e78-1529-4b79-8e41-4196ae1adb17"",
+            ""actions"": [
+                {
+                    ""name"": ""DecreaseFov"",
+                    ""type"": ""Button"",
+                    ""id"": ""0f3d49ec-974e-4543-ad3c-7d5b9984889b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""IncreaseFov"",
+                    ""type"": ""Button"",
+                    ""id"": ""d7e36414-72ba-47ac-95a2-5c4c7a2390c3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""5370be4f-03da-4e43-9e45-0af81e6e5f51"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PreviousCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""d7326c33-a09a-46e1-98fa-df07f938d0d6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""53f6ae73-d151-4d67-9c14-b8e3944f5108"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DecreaseFov"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""42cbc9b9-5170-4cd7-abfd-87453e507fda"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""IncreaseFov"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ea36502b-6832-4cc8-9d4a-aa06e062beda"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""372bc7b0-adef-48cd-9f1a-54b644049a35"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PreviousCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -112,11 +189,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+        // Camera
+        m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
+        m_Camera_DecreaseFov = m_Camera.FindAction("DecreaseFov", throwIfNotFound: true);
+        m_Camera_IncreaseFov = m_Camera.FindAction("IncreaseFov", throwIfNotFound: true);
+        m_Camera_NextCamera = m_Camera.FindAction("NextCamera", throwIfNotFound: true);
+        m_Camera_PreviousCamera = m_Camera.FindAction("PreviousCamera", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, PlayerInputActions.Player.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Camera.enabled, "This will cause a leak and performance issues, PlayerInputActions.Camera.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -220,8 +304,85 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // Camera
+    private readonly InputActionMap m_Camera;
+    private List<ICameraActions> m_CameraActionsCallbackInterfaces = new List<ICameraActions>();
+    private readonly InputAction m_Camera_DecreaseFov;
+    private readonly InputAction m_Camera_IncreaseFov;
+    private readonly InputAction m_Camera_NextCamera;
+    private readonly InputAction m_Camera_PreviousCamera;
+    public struct CameraActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public CameraActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @DecreaseFov => m_Wrapper.m_Camera_DecreaseFov;
+        public InputAction @IncreaseFov => m_Wrapper.m_Camera_IncreaseFov;
+        public InputAction @NextCamera => m_Wrapper.m_Camera_NextCamera;
+        public InputAction @PreviousCamera => m_Wrapper.m_Camera_PreviousCamera;
+        public InputActionMap Get() { return m_Wrapper.m_Camera; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CameraActions set) { return set.Get(); }
+        public void AddCallbacks(ICameraActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CameraActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CameraActionsCallbackInterfaces.Add(instance);
+            @DecreaseFov.started += instance.OnDecreaseFov;
+            @DecreaseFov.performed += instance.OnDecreaseFov;
+            @DecreaseFov.canceled += instance.OnDecreaseFov;
+            @IncreaseFov.started += instance.OnIncreaseFov;
+            @IncreaseFov.performed += instance.OnIncreaseFov;
+            @IncreaseFov.canceled += instance.OnIncreaseFov;
+            @NextCamera.started += instance.OnNextCamera;
+            @NextCamera.performed += instance.OnNextCamera;
+            @NextCamera.canceled += instance.OnNextCamera;
+            @PreviousCamera.started += instance.OnPreviousCamera;
+            @PreviousCamera.performed += instance.OnPreviousCamera;
+            @PreviousCamera.canceled += instance.OnPreviousCamera;
+        }
+
+        private void UnregisterCallbacks(ICameraActions instance)
+        {
+            @DecreaseFov.started -= instance.OnDecreaseFov;
+            @DecreaseFov.performed -= instance.OnDecreaseFov;
+            @DecreaseFov.canceled -= instance.OnDecreaseFov;
+            @IncreaseFov.started -= instance.OnIncreaseFov;
+            @IncreaseFov.performed -= instance.OnIncreaseFov;
+            @IncreaseFov.canceled -= instance.OnIncreaseFov;
+            @NextCamera.started -= instance.OnNextCamera;
+            @NextCamera.performed -= instance.OnNextCamera;
+            @NextCamera.canceled -= instance.OnNextCamera;
+            @PreviousCamera.started -= instance.OnPreviousCamera;
+            @PreviousCamera.performed -= instance.OnPreviousCamera;
+            @PreviousCamera.canceled -= instance.OnPreviousCamera;
+        }
+
+        public void RemoveCallbacks(ICameraActions instance)
+        {
+            if (m_Wrapper.m_CameraActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ICameraActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CameraActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CameraActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public CameraActions @Camera => new CameraActions(this);
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
+    }
+    public interface ICameraActions
+    {
+        void OnDecreaseFov(InputAction.CallbackContext context);
+        void OnIncreaseFov(InputAction.CallbackContext context);
+        void OnNextCamera(InputAction.CallbackContext context);
+        void OnPreviousCamera(InputAction.CallbackContext context);
     }
 }

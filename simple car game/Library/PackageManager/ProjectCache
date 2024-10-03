@@ -6,7 +6,7 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638634934110000000
+      ticks: 638635129540000000
     m_Hash: 1504709916
   m_LockFileStatus:
     m_FilePath: /Users/danielneset/Developer/UnityGames/SimpleCarGame/simple car
@@ -15,7 +15,7 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638634934110000000
+      ticks: 638635129550000000
     m_Hash: 170261271
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
