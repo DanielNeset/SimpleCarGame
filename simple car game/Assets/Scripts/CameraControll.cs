@@ -10,6 +10,8 @@ public class CameraControll : MonoBehaviour
     public float fovChangeSpeed = 5f;  
     public float minFOV = 20f;         
     public float maxFOV = 90f;
+    public GameObject player;
+    private Vector3 offset;
 
     PlayerInputActions playerInputActions;
 
@@ -27,7 +29,11 @@ public class CameraControll : MonoBehaviour
 
     void Start()
     {
-        if(cameras.Count == 0)
+
+        //Need offsett for each camera
+        offset = transform.position - player.transform.position;
+
+        if (cameras.Count == 0)
         {
             Debug.LogError("Need to set Main camera in the list!");
         }
@@ -73,6 +79,30 @@ public class CameraControll : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        foreach (Camera camera in cameras)
+        {
+            if (camera.CompareTag("StaticCamera"))
+            {
+
+            }
+            else
+            {
+                // Rotate the offset based on the player's Y-axis (left and right) rotation only
+                Quaternion playerRotation = Quaternion.Euler(0, player.transform.eulerAngles.y, 0);
+                Vector3 rotatedOffset = playerRotation * offset;
+
+                // Update the camera's position based on the player's position and the rotated offset
+                camera.transform.position = player.transform.position + rotatedOffset;
+
+                // Keep the camera looking at the player (optional, if you want the camera to look at the player)
+                camera.transform.LookAt(player.transform.position);
+            }
+        }
+
+    }
+
     private void OnIncreaseFOVStarted(InputAction.CallbackContext context)
     {
         isIncreasingFOV = true;
@@ -110,6 +140,8 @@ public class CameraControll : MonoBehaviour
             cameras[cameraIndex].enabled = true;
         }
     }
+
+
 
 
     // Method to increase FOV (Zoom out)
