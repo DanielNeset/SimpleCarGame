@@ -21,6 +21,9 @@ public class CameraControll : MonoBehaviour
     private bool isDecreasingFOV = false;
 
     private int cameraIndex = 0;
+    private List<Vector3> offsets = new List<Vector3>();
+    private List<Quaternion> rotationOffsets = new List<Quaternion>();
+
 
     private void Awake()
     {
@@ -29,7 +32,6 @@ public class CameraControll : MonoBehaviour
 
     void Start()
     {
-
         //Need offsett for each camera
         offset = transform.position - player.transform.position;
 
@@ -41,6 +43,12 @@ public class CameraControll : MonoBehaviour
         {
             camera.enabled = false;
             camera.GetComponent<AudioListener>().enabled = false;
+
+            Vector3 offset = camera.transform.position - player.transform.position;
+            offsets.Add(offset);
+
+            Quaternion rotationOffset = camera.transform.rotation;
+            rotationOffsets.Add(rotationOffset);
         }
         cameras[0].enabled = true;
         cameras[0].GetComponent<AudioListener>().enabled = true;
@@ -55,6 +63,8 @@ public class CameraControll : MonoBehaviour
         playerInputActions.Camera.DecreaseFov.started += OnDecreaseFOVStarted;
         playerInputActions.Camera.DecreaseFov.canceled += OnDecreaseFOVCanceled;
         playerInputActions.Camera.NextCamera.performed += NextCamera;
+        playerInputActions.Camera.PreviousCamera.performed += PreviousCamera;
+
     }
 
     private void OnDisable()
@@ -64,6 +74,8 @@ public class CameraControll : MonoBehaviour
         playerInputActions.Camera.DecreaseFov.started -= OnDecreaseFOVStarted;
         playerInputActions.Camera.DecreaseFov.canceled -= OnDecreaseFOVCanceled;
         playerInputActions.Camera.NextCamera.performed -= NextCamera;
+        playerInputActions.Camera.PreviousCamera.performed -= PreviousCamera;
+
         playerInputActions.Camera.Disable();
     }
 
@@ -81,24 +93,27 @@ public class CameraControll : MonoBehaviour
 
     private void LateUpdate()
     {
-        foreach (Camera camera in cameras)
+        Camera activeCamera = cameras[cameraIndex];
+
+        // Rotate and position only the active camera
+        if (!activeCamera.CompareTag("StaticCamera"))
         {
-            if (camera.CompareTag("StaticCamera"))
-            {
+            // Rotate only on the Y-axis based on the player's rotation
+            Quaternion playerRotationY = Quaternion.Euler(0, player.transform.eulerAngles.y, 0);
 
-            }
-            else
-            {
-                // Rotate the offset based on the player's Y-axis (left and right) rotation only
-                Quaternion playerRotation = Quaternion.Euler(0, player.transform.eulerAngles.y, 0);
-                Vector3 rotatedOffset = playerRotation * offset;
+            // Use the stored offset for the position
+            Vector3 rotatedOffset = playerRotationY * offsets[cameraIndex];
 
-                // Update the camera's position based on the player's position and the rotated offset
-                camera.transform.position = player.transform.position + rotatedOffset;
+            // Update the camera's position based on the player's position and the rotated offset
+            activeCamera.transform.position = player.transform.position + rotatedOffset;
 
-                // Keep the camera looking at the player (optional, if you want the camera to look at the player)
-                camera.transform.LookAt(player.transform.position);
-            }
+            // Apply the Y rotation of the player, but preserve the initial X and Z rotation of the camera
+            Vector3 cameraRotation = rotationOffsets[cameraIndex].eulerAngles;  // Get initial rotation
+            activeCamera.transform.rotation = Quaternion.Euler(cameraRotation.x, player.transform.eulerAngles.y, cameraRotation.z);
+
+        }else
+        {
+            activeCamera.transform.position = player.transform.position + offsets[cameraIndex];
         }
 
     }
@@ -121,27 +136,42 @@ public class CameraControll : MonoBehaviour
     }
     private void NextCamera(InputAction.CallbackContext context)
     {
-
         int index = cameraIndex;
         int newIndex = index + 1;
-
-        Debug.Log(newIndex + " " + cameras.Count);
 
         if (newIndex <= cameras.Count - 1)
         {
             cameras[index].enabled = false;
             cameras[newIndex].enabled = true;
             cameraIndex++;
-            Debug.Log(newIndex + " " + index);
         }else
         {
             cameraIndex = 0;
             cameras[index].enabled = false;
             cameras[cameraIndex].enabled = true;
         }
+        cameraComponent = cameras[cameraIndex];
     }
 
+    private void PreviousCamera(InputAction.CallbackContext context)
+    {
+        int index = cameraIndex;
+        int newIndex = index - 1;
 
+        if (newIndex >= 0)
+        {
+            cameras[index].enabled = false;
+            cameras[newIndex].enabled = true;
+            cameraIndex--;
+        }
+        else
+        {
+            cameraIndex = cameras.Count - 1;
+            cameras[index].enabled = false;
+            cameras[cameraIndex].enabled = true;
+        }
+        cameraComponent = cameras[cameraIndex];
+    }
 
 
     // Method to increase FOV (Zoom out)

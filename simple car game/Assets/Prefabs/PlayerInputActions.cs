@@ -237,6 +237,138 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Sun"",
+            ""id"": ""e0412407-8337-48ae-8e42-6e2eed0415b1"",
+            ""actions"": [
+                {
+                    ""name"": ""RotateLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""f8121f46-25f8-40ee-b652-153cdb7b62b0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""21615406-636e-4680-9d50-fc02a5ec5ad7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""IncreaseIntensity"",
+                    ""type"": ""Button"",
+                    ""id"": ""908b93ba-ee9e-46d3-a5b8-8760747e2a2e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DecreaseIntensity"",
+                    ""type"": ""Button"",
+                    ""id"": ""a3633fa1-7ba8-44d0-a379-adac6277bcb4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""74e67807-ce68-42c8-b552-54e1c62e4927"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""RotateLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f7598873-7505-4d8a-85ab-921f889f4b02"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""RotateLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ff4c25d-bf61-482c-8a47-69e59bc9039a"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""RotateRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9b0b2eea-10bd-4d9f-8829-573432f6d982"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""RotateRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""58e2646f-0189-4e61-80c4-fd1558607a30"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""IncreaseIntensity"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""65cc1ad3-b8d9-4eee-a250-e54664a3b99e"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""IncreaseIntensity"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bace7346-38e8-4962-9060-ab0128526ac6"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""DecreaseIntensity"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fd2e4887-91b6-4845-91ca-a20b0cbb4b22"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""DecreaseIntensity"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -273,12 +405,19 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Camera_IncreaseFov = m_Camera.FindAction("IncreaseFov", throwIfNotFound: true);
         m_Camera_NextCamera = m_Camera.FindAction("NextCamera", throwIfNotFound: true);
         m_Camera_PreviousCamera = m_Camera.FindAction("PreviousCamera", throwIfNotFound: true);
+        // Sun
+        m_Sun = asset.FindActionMap("Sun", throwIfNotFound: true);
+        m_Sun_RotateLeft = m_Sun.FindAction("RotateLeft", throwIfNotFound: true);
+        m_Sun_RotateRight = m_Sun.FindAction("RotateRight", throwIfNotFound: true);
+        m_Sun_IncreaseIntensity = m_Sun.FindAction("IncreaseIntensity", throwIfNotFound: true);
+        m_Sun_DecreaseIntensity = m_Sun.FindAction("DecreaseIntensity", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, PlayerInputActions.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Camera.enabled, "This will cause a leak and performance issues, PlayerInputActions.Camera.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Sun.enabled, "This will cause a leak and performance issues, PlayerInputActions.Sun.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -452,6 +591,76 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         }
     }
     public CameraActions @Camera => new CameraActions(this);
+
+    // Sun
+    private readonly InputActionMap m_Sun;
+    private List<ISunActions> m_SunActionsCallbackInterfaces = new List<ISunActions>();
+    private readonly InputAction m_Sun_RotateLeft;
+    private readonly InputAction m_Sun_RotateRight;
+    private readonly InputAction m_Sun_IncreaseIntensity;
+    private readonly InputAction m_Sun_DecreaseIntensity;
+    public struct SunActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public SunActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @RotateLeft => m_Wrapper.m_Sun_RotateLeft;
+        public InputAction @RotateRight => m_Wrapper.m_Sun_RotateRight;
+        public InputAction @IncreaseIntensity => m_Wrapper.m_Sun_IncreaseIntensity;
+        public InputAction @DecreaseIntensity => m_Wrapper.m_Sun_DecreaseIntensity;
+        public InputActionMap Get() { return m_Wrapper.m_Sun; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(SunActions set) { return set.Get(); }
+        public void AddCallbacks(ISunActions instance)
+        {
+            if (instance == null || m_Wrapper.m_SunActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_SunActionsCallbackInterfaces.Add(instance);
+            @RotateLeft.started += instance.OnRotateLeft;
+            @RotateLeft.performed += instance.OnRotateLeft;
+            @RotateLeft.canceled += instance.OnRotateLeft;
+            @RotateRight.started += instance.OnRotateRight;
+            @RotateRight.performed += instance.OnRotateRight;
+            @RotateRight.canceled += instance.OnRotateRight;
+            @IncreaseIntensity.started += instance.OnIncreaseIntensity;
+            @IncreaseIntensity.performed += instance.OnIncreaseIntensity;
+            @IncreaseIntensity.canceled += instance.OnIncreaseIntensity;
+            @DecreaseIntensity.started += instance.OnDecreaseIntensity;
+            @DecreaseIntensity.performed += instance.OnDecreaseIntensity;
+            @DecreaseIntensity.canceled += instance.OnDecreaseIntensity;
+        }
+
+        private void UnregisterCallbacks(ISunActions instance)
+        {
+            @RotateLeft.started -= instance.OnRotateLeft;
+            @RotateLeft.performed -= instance.OnRotateLeft;
+            @RotateLeft.canceled -= instance.OnRotateLeft;
+            @RotateRight.started -= instance.OnRotateRight;
+            @RotateRight.performed -= instance.OnRotateRight;
+            @RotateRight.canceled -= instance.OnRotateRight;
+            @IncreaseIntensity.started -= instance.OnIncreaseIntensity;
+            @IncreaseIntensity.performed -= instance.OnIncreaseIntensity;
+            @IncreaseIntensity.canceled -= instance.OnIncreaseIntensity;
+            @DecreaseIntensity.started -= instance.OnDecreaseIntensity;
+            @DecreaseIntensity.performed -= instance.OnDecreaseIntensity;
+            @DecreaseIntensity.canceled -= instance.OnDecreaseIntensity;
+        }
+
+        public void RemoveCallbacks(ISunActions instance)
+        {
+            if (m_Wrapper.m_SunActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ISunActions instance)
+        {
+            foreach (var item in m_Wrapper.m_SunActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_SunActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public SunActions @Sun => new SunActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -480,5 +689,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnIncreaseFov(InputAction.CallbackContext context);
         void OnNextCamera(InputAction.CallbackContext context);
         void OnPreviousCamera(InputAction.CallbackContext context);
+    }
+    public interface ISunActions
+    {
+        void OnRotateLeft(InputAction.CallbackContext context);
+        void OnRotateRight(InputAction.CallbackContext context);
+        void OnIncreaseIntensity(InputAction.CallbackContext context);
+        void OnDecreaseIntensity(InputAction.CallbackContext context);
     }
 }

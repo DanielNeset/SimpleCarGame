@@ -39,15 +39,11 @@ public class PlayerMovement : MonoBehaviour
 
 
         currentSteeringAngle = Mathf.Clamp(currentSteeringAngle + desiredSteeringAngle, -maxSteeringAngle, maxSteeringAngle);
-
-
-
         transform.Translate(Vector3.forward * input.y * speed * Time.deltaTime);
 
 
         if(input.y != 0){
             transform.Rotate(Vector3.up, input.x * input.y * Time.deltaTime * rotationSpeed);
-            Debug.Log(input.x);
         }
 
         foreach (GameObject frontWheel in frontWheels)
